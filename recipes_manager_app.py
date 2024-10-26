@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from tkinter import messagebox
 from data_handler import save_recipes_to_json, load_recipes_from_json
 from models import Recipe, Ingredient
 
@@ -134,6 +135,25 @@ class RecipesManagerApp(ctk.CTk):
             ingredients_text = "\n".join([f"{ing.name}: {ing.quantity} {ing.unit}" for ing in recipe.ingredients])
             ingredients_label = ctk.CTkLabel(recipes_frame, text=ingredients_text)
             ingredients_label.grid(row=i*2+1, column=0, sticky="ew", padx=20, pady=5)
+
+            # Add a delete button
+            delete_button = ctk.CTkButton(recipes_frame, text="Delete", command=lambda idx=i: self.delete_recipe(idx))
+            delete_button.grid(row=i*2, column=1, sticky="ew", padx=5, pady=5)
+
+    def delete_recipe(self, index):
+        # Confirm deletion (optional)
+        confirm = messagebox.askokcancel("Confirm Deletion", f"Are you sure you want to delete '{self.recipes[index].name}'?")
+        if confirm:
+            # Remove the recipe from the list
+            deleted_recipe = self.recipes.pop(index)
+            
+            # Save the updated recipes list to JSON
+            save_recipes_to_json(self.recipes)
+
+            # Refresh the view
+            print(f"Recipe '{deleted_recipe.name}' deleted successfully!")
+            self.show_frame("view_recipes_frame")  # Refresh the view to show updated list
+
 
     def save_recipe(self):
         recipe_name = self.recipe_name_entry.get()
