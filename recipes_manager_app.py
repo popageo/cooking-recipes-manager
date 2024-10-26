@@ -94,13 +94,19 @@ class RecipesManagerApp(ctk.CTk):
         self.frames["groceries_frame"].grid(row=1, column=0, padx=50, pady=50)
 
     def create_view_recipes_frame(self):
-        # Create a frame for viewing recipes
+        # Reload the recipes from the JSON file
+        self.recipes = load_recipes_from_json()
+        # Create or refresh the frame for viewing recipes
+        if "view_recipes_frame" in self.frames:
+            # Destroy the existing frame before creating a new one
+            self.frames["view_recipes_frame"].destroy()
+
         self.frames["view_recipes_frame"] = ctk.CTkFrame(self)
         self.frames["view_recipes_frame"].grid(row=1, column=0, padx=50, pady=50)
 
         self.frames["view_recipes_frame"].grid_rowconfigure(0, weight=1)
         self.frames["view_recipes_frame"].grid_columnconfigure(0, weight=1)
-        
+            
         # Add a title label
         title_label = ctk.CTkLabel(self.frames["view_recipes_frame"], text="Recipes List", font=ctk.CTkFont(size=18))
         title_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
@@ -111,20 +117,23 @@ class RecipesManagerApp(ctk.CTk):
         recipes_frame.configure(width=600, height=350)
         recipes_frame.grid_columnconfigure(0, weight=1)
 
+        # Add a back button to return to the main menu or other frames
+        back_button = ctk.CTkButton(self.frames["view_recipes_frame"], text="Back", command=lambda: self.show_frame("add_recipe_frame"))
+        back_button.grid(row=2, column=0, padx=10, pady=10)
+
         # Populate the scrollable frame with recipe details
         for i, recipe in enumerate(self.recipes):
             # Display recipe name and servings
             recipe_label = ctk.CTkLabel(recipes_frame, text=f"{recipe.name} (servings: {recipe.servings})", font=ctk.CTkFont(size=14, weight="bold"))
             recipe_label.grid(row=i*2, column=0, sticky="ew", padx=5, pady=5)
 
+            # servings_label = ctk.CTkLabel(recipes_frame, text=f"(servings: {recipe.servings})", font=ctk.CTkFont(size=14, weight="bold"))
+            # servings_label.grid(row=i*2+1, column=0, sticky="ew", padx=5, pady=5)
+
             # Display each ingredient in the recipe
             ingredients_text = "\n".join([f"{ing.name}: {ing.quantity} {ing.unit}" for ing in recipe.ingredients])
             ingredients_label = ctk.CTkLabel(recipes_frame, text=ingredients_text)
             ingredients_label.grid(row=i*2+1, column=0, sticky="ew", padx=20, pady=5)
-            
-        # Add a back button to return to the main menu or other frames
-        back_button = ctk.CTkButton(self.frames["view_recipes_frame"], text="Back", command=lambda: self.show_frame("add_recipe_frame"))
-        back_button.grid(row=2, column=0, padx=10, pady=10)
 
     def save_recipe(self):
         recipe_name = self.recipe_name_entry.get()
@@ -172,14 +181,15 @@ class RecipesManagerApp(ctk.CTk):
         self.add_ingredient_entry()
 
     def show_frame(self, frame_name):
-    # Create the frame if it doesn't exist
-        if frame_name not in self.frames:
+        # Destroy and recreate the frame to ensure it's always updated
+        if frame_name == "view_recipes_frame":
+            self.create_view_recipes_frame()
+        # Create the frame if it doesn't exist
+        elif frame_name not in self.frames:
             if frame_name == "add_recipe_frame":
                 self.create_add_recipe_frame()
             elif frame_name == "groceries_frame":
                 self.create_groceries_frame()
-            elif frame_name == "view_recipes_frame":
-                self.create_view_recipes_frame()
 
         # Hide all frames
         for frame in self.frames.values():
