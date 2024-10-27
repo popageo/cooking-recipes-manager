@@ -7,7 +7,7 @@ class RecipesManagerApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Recipes Manager")
-        self.geometry("600x700")
+        self.geometry("800x700")
         self.minsize(width=600, height=700)
 
         # Initialize recipes list
@@ -293,7 +293,6 @@ class RecipesManagerApp(ctk.CTk):
         # Populate the servings field
         self.servings_entry.delete(0, 'end')
         self.servings_entry.insert(0, recipe.servings)
-
 
         # Clear any existing ingredient entries
         for ingredient_entry, quantity_entry, unit_entry in self.ingredients_entries:
