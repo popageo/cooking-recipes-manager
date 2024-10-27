@@ -10,7 +10,6 @@ class Ingredient:
     def __repr__(self):
         return f"Ingredient(name={self.name}, quantity={self.quantity}, unit={self.unit})"
 
-
 class Recipe:
     def __init__(self, name, servings):
         self.name = name

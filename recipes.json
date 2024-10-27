@@ -1,22 +1,134 @@
 [
     {
-        "name": "2222222222222222",
+        "name": "chili con carne",
         "servings": 1,
         "ingredients": [
             {
-                "name": "2222222222",
-                "quantity": "22",
-                "unit": "22"
+                "name": "onion",
+                "quantity": "1",
+                "unit": "pcs"
             },
             {
-                "name": "2222222222",
-                "quantity": "22",
-                "unit": "22"
+                "name": "red pepper",
+                "quantity": "1",
+                "unit": "pcs"
             },
             {
-                "name": "2222222222",
+                "name": "hot chilli powder",
+                "quantity": "1",
+                "unit": "tbsp"
+            },
+            {
+                "name": "paprika",
+                "quantity": "1",
+                "unit": "tsp"
+            },
+            {
+                "name": "ground cumin",
+                "quantity": "1",
+                "unit": "tsp"
+            },
+            {
+                "name": "lean minced beef",
+                "quantity": "500",
+                "unit": "g"
+            },
+            {
+                "name": "beef stock cube",
+                "quantity": "1",
+                "unit": "pcs"
+            },
+            {
+                "name": "chopped tomatoes",
+                "quantity": "1",
+                "unit": "can"
+            },
+            {
+                "name": "dried marjoram",
+                "quantity": "1",
+                "unit": "pcs"
+            },
+            {
+                "name": "sugar",
+                "quantity": "1",
+                "unit": "tsp"
+            },
+            {
+                "name": "tomato puree",
                 "quantity": "2",
-                "unit": "2"
+                "unit": "tbsp"
+            },
+            {
+                "name": "red kidney beans",
+                "quantity": "1",
+                "unit": "can"
+            }
+        ]
+    },
+    {
+        "name": "easy pancakes",
+        "servings": 1,
+        "ingredients": [
+            {
+                "name": "plain flour",
+                "quantity": "100",
+                "unit": "g"
+            },
+            {
+                "name": "eggs",
+                "quantity": "2",
+                "unit": "pcs"
+            },
+            {
+                "name": "milk",
+                "quantity": "300",
+                "unit": "ml"
+            },
+            {
+                "name": "lemon",
+                "quantity": "1",
+                "unit": "pcs"
+            }
+        ]
+    },
+    {
+        "name": "banana bread",
+        "servings": 1,
+        "ingredients": [
+            {
+                "name": "butter",
+                "quantity": "140",
+                "unit": "g"
+            },
+            {
+                "name": "caster sugar",
+                "quantity": "140",
+                "unit": "g"
+            },
+            {
+                "name": "eggs",
+                "quantity": "2",
+                "unit": "pcs"
+            },
+            {
+                "name": "self-raising flour",
+                "quantity": "140",
+                "unit": "g"
+            },
+            {
+                "name": "baking powder",
+                "quantity": "1",
+                "unit": "tsp"
+            },
+            {
+                "name": "bananas ",
+                "quantity": "2",
+                "unit": "pcs"
+            },
+            {
+                "name": "dried banana chips",
+                "quantity": "1",
+                "unit": "pcs"
             }
         ]
     }

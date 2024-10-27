@@ -7,20 +7,19 @@ class RecipesManagerApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Recipes Manager")
-        self.geometry("800x600")
-        self.minsize(width=600, height=400)
+        self.geometry("600x700")
+        self.minsize(width=600, height=700)
 
         # Initialize recipes list
-        # self.recipes = []  # This will store all the recipe objects
-        self.recipes = load_recipes_from_json()  # This will store all the recipe objects
+        # self.recipes = []
+        self.recipes = load_recipes_from_json()
 
         self.frames = {}
         self.ingredients_entries = [] 
 
         self.create_menu_frame()
-        # self.create_add_recipe_frame()
 
-        self.show_frame("add_recipe_frame")
+        self.show_frame("view_recipes_frame")
 
     def create_menu_frame(self):
         menu_frame = ctk.CTkFrame(self)
@@ -28,7 +27,6 @@ class RecipesManagerApp(ctk.CTk):
         
         self.grid_columnconfigure(0, weight=1)  
 
-        # Add buttons to the menu frame
         self.view_recipes_button = ctk.CTkButton(menu_frame, text="View Recipes", command=lambda: self.show_frame("view_recipes_frame"))
         self.view_recipes_button.pack(side="left", padx=5, pady=5)
 
@@ -43,24 +41,21 @@ class RecipesManagerApp(ctk.CTk):
         self.frames["add_recipe_frame"] = ctk.CTkFrame(self)
         self.frames["add_recipe_frame"].grid(row=1, column=0, padx=50, pady=50)
 
-        # Configure row weights to allow expansion if needed
         self.frames["add_recipe_frame"].grid_rowconfigure(0, weight=1)
         self.frames["add_recipe_frame"].grid_columnconfigure(0, weight=1)
 
-        recipe_name_label = ctk.CTkLabel(self.frames["add_recipe_frame"], font=ctk.CTkFont(size=16), text="Enter recipe details")
+        recipe_name_label = ctk.CTkLabel(self.frames["add_recipe_frame"], font=ctk.CTkFont(size=16, weight="bold"), text="Recipe Details")
         recipe_name_label.grid(row=0, column=0, padx=5, pady=5)
 
-        self.recipe_name_entry = ctk.CTkEntry(self.frames["add_recipe_frame"], width=420, height=30, placeholder_text="Enter recipe name")
-        self.recipe_name_entry.grid(row=1, column=0, padx=5, pady=5)
+        # Frame for recipe details entry
+        self.recipe_details_frame = ctk.CTkFrame(self.frames["add_recipe_frame"])
+        self.recipe_details_frame.grid(row=1, column=0, columnspan=2, pady=5)
 
-        # self.servings_entry = ctk.CTkEntry(self.frames["add_recipe_frame"], width=100, height=30, placeholder_text="Servings")
-        # self.servings_entry.grid(row=1, column=1, padx=5, pady=5)
-
-        # Frame for ingredients
+        # Frame for ingredients entry
         self.ingredients_frame = ctk.CTkFrame(self.frames["add_recipe_frame"])
         self.ingredients_frame.grid(row=2, column=0, columnspan=2, pady=5)
 
-        # Add the first pair of ingredient and quantity entries
+        self.add_recipe_entry()
         self.add_ingredient_entry()
 
         # Button to add more ingredients
@@ -69,30 +64,11 @@ class RecipesManagerApp(ctk.CTk):
 
         # Add a save button for the form
         save_button = ctk.CTkButton(self.frames["add_recipe_frame"], text="Save Recipe", command=self.save_recipe)
-        save_button.grid(row=4, column=0, columnspan=2, pady=10)
+        save_button.grid(row=4, column=0, columnspan=2, pady=5)
 
-        # Add a cancel button to go back or clear fields
-        cancel_button = ctk.CTkButton(self.frames["add_recipe_frame"], text="Cancel", command=lambda: self.show_frame("view_recipes_frame"))
+        # Add a cancel button to clear fields
+        cancel_button = ctk.CTkButton(self.frames["add_recipe_frame"], text="Cancel", command=self.reset_form)
         cancel_button.grid(row=5, column=0, columnspan=2, pady=5)
-
-    def add_ingredient_entry(self):
-        row = len(self.ingredients_entries)
-        
-        ingredient_entry = ctk.CTkEntry(self.ingredients_frame, width=200, height=30, placeholder_text="Ingredient")
-        ingredient_entry.grid(row=row, column=0, padx=5, pady=5, sticky="ew")
-
-        quantity_entry = ctk.CTkEntry(self.ingredients_frame, width=100, height=30, placeholder_text="Quantity")
-        quantity_entry.grid(row=row, column=1, padx=5, pady=5, sticky="ew")
-
-        unit_entry = ctk.CTkEntry(self.ingredients_frame, width=100, height=30, placeholder_text="Unit")
-        unit_entry.grid(row=row, column=2, padx=5, pady=5, sticky="ew")
-
-        self.ingredients_entries.append((ingredient_entry, quantity_entry, unit_entry))
-
-    def create_groceries_frame(self):
-
-        self.frames["groceries_frame"] = ctk.CTkFrame(self)
-        self.frames["groceries_frame"].grid(row=1, column=0, padx=50, pady=50)
 
     def create_view_recipes_frame(self):
         # Reload the recipes from the JSON file
@@ -109,55 +85,170 @@ class RecipesManagerApp(ctk.CTk):
         self.frames["view_recipes_frame"].grid_columnconfigure(0, weight=1)
             
         # Add a title label
-        title_label = ctk.CTkLabel(self.frames["view_recipes_frame"], text="Recipes List", font=ctk.CTkFont(size=18))
-        title_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+        title_label = ctk.CTkLabel(self.frames["view_recipes_frame"], text="Recipes List", font=ctk.CTkFont(size=16, weight="bold"))
+        title_label.grid(row=0, column=0, columnspan=2, padx=5, pady=5)
 
-        # Create a scrollable frame for the recipe list
+        # Create a frame for the recipe list
         recipes_frame = ctk.CTkScrollableFrame(self.frames["view_recipes_frame"])
-        recipes_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
-        recipes_frame.configure(width=600, height=350)
+        recipes_frame.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+        recipes_frame.configure(width=600, height=470)
         recipes_frame.grid_columnconfigure(0, weight=1)
 
         # Add a back button to return to the main menu or other frames
         back_button = ctk.CTkButton(self.frames["view_recipes_frame"], text="Back", command=lambda: self.show_frame("add_recipe_frame"))
-        back_button.grid(row=2, column=0, padx=10, pady=10)
+        back_button.grid(row=2, column=0, padx=5, pady=5)
 
-        # Populate the scrollable frame with recipe details
+        # Populate the frame with recipe details
         for i, recipe in enumerate(self.recipes):
             # Display recipe name and servings
             recipe_label = ctk.CTkLabel(recipes_frame, text=f"{recipe.name} (servings: {recipe.servings})", font=ctk.CTkFont(size=14, weight="bold"))
             recipe_label.grid(row=i*2, column=0, sticky="ew", padx=5, pady=5)
-
-            # servings_label = ctk.CTkLabel(recipes_frame, text=f"(servings: {recipe.servings})", font=ctk.CTkFont(size=14, weight="bold"))
-            # servings_label.grid(row=i*2+1, column=0, sticky="ew", padx=5, pady=5)
 
             # Display each ingredient in the recipe
             ingredients_text = "\n".join([f"{ing.name}: {ing.quantity} {ing.unit}" for ing in recipe.ingredients])
             ingredients_label = ctk.CTkLabel(recipes_frame, text=ingredients_text)
             ingredients_label.grid(row=i*2+1, column=0, sticky="ew", padx=20, pady=5)
 
-            # Add a delete button
             delete_button = ctk.CTkButton(recipes_frame, text="Delete", command=lambda idx=i: self.delete_recipe(idx))
             delete_button.grid(row=i*2, column=1, sticky="ew", padx=5, pady=5)
 
-    def delete_recipe(self, index):
-        # Confirm deletion (optional)
-        confirm = messagebox.askokcancel("Confirm Deletion", f"Are you sure you want to delete '{self.recipes[index].name}'?")
-        if confirm:
-            # Remove the recipe from the list
-            deleted_recipe = self.recipes.pop(index)
+    def create_groceries_frame(self):
+        # Create or refresh the frame for viewing the grocery list
+        if "groceries_frame" in self.frames:
+            # Destroy the existing frame before creating a new one
+            self.frames["groceries_frame"].destroy()
             
-            # Save the updated recipes list to JSON
-            save_recipes_to_json(self.recipes)
+        self.frames["groceries_frame"] = ctk.CTkFrame(self)
+        self.frames["groceries_frame"].grid(row=1, column=0, padx=50, pady=50)
 
-            # Refresh the view
-            print(f"Recipe '{deleted_recipe.name}' deleted successfully!")
-            self.show_frame("view_recipes_frame")  # Refresh the view to show updated list
+        self.frames["groceries_frame"].grid_rowconfigure(0, weight=1)
+        self.frames["groceries_frame"].grid_columnconfigure(0, weight=1)
+        
+        # Add a title label
+        title_label = ctk.CTkLabel(self.frames["groceries_frame"], text="Select Recipes", font=ctk.CTkFont(size=16, weight="bold"))
+        title_label.grid(row=0, column=0, columnspan=2, padx=5, pady=5)
 
+        # Create a frame for the recipe list
+        recipes_frame = ctk.CTkScrollableFrame(self.frames["groceries_frame"])
+        recipes_frame.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+        recipes_frame.grid_columnconfigure(0, weight=1)
+
+        # A dictionary to keep track of selected recipes
+        self.selected_recipes = {}
+
+        # Populate the frame with recipe checkboxes
+        for i, recipe in enumerate(self.recipes):
+            # Create a checkbox for each recipe
+            var = ctk.BooleanVar()
+            self.selected_recipes[recipe.name] = var
+
+            recipe_checkbox = ctk.CTkCheckBox(
+                recipes_frame,
+                text=f"{recipe.name} (Servings: {recipe.servings})",
+                variable=var
+            )
+            recipe_checkbox.grid(row=i, column=0, sticky="w", padx=5, pady=5)
+        
+        # Add a button to generate the grocery list
+        generate_button = ctk.CTkButton(self.frames["groceries_frame"], text="Generate Grocery List", command=self.generate_grocery_list)
+        generate_button.grid(row=2, column=0, padx=5, pady=5)
+
+        # Create a frame to display the generated grocery list
+        self.grocery_list_frame = ctk.CTkScrollableFrame(self.frames["groceries_frame"])
+        self.grocery_list_frame.grid(row=3, column=0, padx=5, pady=5, sticky="nsew")
+        self.grocery_list_frame.grid_columnconfigure(0, weight=1)
+
+        # Add a button to print the grocery list to a file
+        print_button = ctk.CTkButton(self.frames["groceries_frame"], text="Print", command=self.print_grocery_list)
+        print_button.grid(row=4, column=0, padx=5, pady=5)
+
+    def generate_grocery_list(self):
+        # Dictionary to store ingredients
+        grocery_list = {}
+
+        # Iterate over selected recipes
+        for recipe in self.recipes:
+            if self.selected_recipes[recipe.name].get():
+                # For each selected recipe, add ingredients to the grocery list
+                for ingredient in recipe.ingredients:
+                    if ingredient.name in grocery_list:
+                        # Add to the existing quantity if the ingredient is already in the list
+                        grocery_list[ingredient.name]["quantity"] += int(ingredient.quantity)
+                    else:
+                        # Add a new entry for the ingredient
+                        grocery_list[ingredient.name] = {
+                            "quantity": int(ingredient.quantity),
+                            "unit": ingredient.unit
+                        }
+
+        # Clear the previous grocery list frame
+        for widget in self.grocery_list_frame.winfo_children():
+            widget.destroy()
+
+        # Display the grocery list in the grocery_list_frame
+        for i, (ingredient, details) in enumerate(grocery_list.items()):
+            ingredient_label = ctk.CTkLabel(
+                self.grocery_list_frame,
+                text=f"{ingredient}: {details['quantity']} {details['unit']}",
+                font=ctk.CTkFont(size=14)
+            )
+            ingredient_label.grid(row=i, column=0, sticky="w", padx=5, pady=5)
+
+    def print_grocery_list(self):
+        # Dictionary to store ingredients
+        grocery_list = {}
+
+        # Iterate over selected recipes
+        for recipe in self.recipes:
+            if self.selected_recipes[recipe.name].get():
+                # For each selected recipe, add ingredients to the grocery list
+                for ingredient in recipe.ingredients:
+                    if ingredient.name in grocery_list:
+                        # Add to the existing quantity if the ingredient is already in the list
+                        grocery_list[ingredient.name]["quantity"] += int(ingredient.quantity)
+                    else:
+                        # Add a new entry for the ingredient
+                        grocery_list[ingredient.name] = {
+                            "quantity": int(ingredient.quantity),
+                            "unit": ingredient.unit
+                        }
+
+        # Create a formatted string for the grocery list
+        grocery_list_str = ""
+        for ingredient, details in grocery_list.items():
+            grocery_list_str += f"{ingredient}: {details['quantity']} {details['unit']}\n"
+
+        # Write the formatted grocery list to a text file
+        with open("grocery_list.txt", "w") as file:
+            file.write("Grocery List:\n")
+            file.write(grocery_list_str)
+
+        print("Grocery list saved to 'grocery_list.txt'.")
+    
+    def add_ingredient_entry(self):
+        row = len(self.ingredients_entries)
+        
+        ingredient_entry = ctk.CTkEntry(self.ingredients_frame, width=200, height=30, placeholder_text="Ingredient")
+        ingredient_entry.grid(row=row, column=0, padx=5, pady=5, sticky="ew")
+
+        quantity_entry = ctk.CTkEntry(self.ingredients_frame, width=100, height=30, placeholder_text="Quantity")
+        quantity_entry.grid(row=row, column=1, padx=5, pady=5, sticky="ew")
+
+        unit_entry = ctk.CTkEntry(self.ingredients_frame, width=100, height=30, placeholder_text="Unit")
+        unit_entry.grid(row=row, column=2, padx=5, pady=5, sticky="ew")
+
+        self.ingredients_entries.append((ingredient_entry, quantity_entry, unit_entry))
+
+    def add_recipe_entry(self):
+        self.recipe_name_entry = ctk.CTkEntry(self.recipe_details_frame, width=310, height=30, placeholder_text="Recipe Name")
+        self.recipe_name_entry.grid(row=1, column=0, padx=5, pady=5)
+
+        self.servings_entry = ctk.CTkEntry(self.recipe_details_frame, width=100, height=30, placeholder_text="Servings")
+        self.servings_entry.grid(row=1, column=1, padx=5, pady=5)
 
     def save_recipe(self):
         recipe_name = self.recipe_name_entry.get()
-        servings = 1 # self.servings_entry.get()
+        servings = self.servings_entry.get()
 
         if not recipe_name or not servings:
             print("Please enter recipe name and servings.")
@@ -184,9 +275,24 @@ class RecipesManagerApp(ctk.CTk):
 
         self.reset_form()
 
+    def delete_recipe(self, index):
+        # Confirm deletion
+        confirm = messagebox.askokcancel("Confirm Deletion", f"Are you sure you want to delete '{self.recipes[index].name}'?")
+        if confirm:
+            # Remove the recipe from the list
+            deleted_recipe = self.recipes.pop(index)
+            
+            # Save the updated recipes list to JSON
+            save_recipes_to_json(self.recipes)
+
+            # Refresh the view
+            print(f"Recipe '{deleted_recipe.name}' deleted successfully!")
+            self.show_frame("view_recipes_frame")
+
     def reset_form(self):
         # Clear the recipe name field
         self.recipe_name_entry.delete(0, 'end')
+        self.servings_entry.delete(0, 'end')
 
         # Remove all ingredient entries from the UI and clear the list
         for ingredient_entry, quantity_entry, unit_entry in self.ingredients_entries:
@@ -204,16 +310,16 @@ class RecipesManagerApp(ctk.CTk):
         # Destroy and recreate the frame to ensure it's always updated
         if frame_name == "view_recipes_frame":
             self.create_view_recipes_frame()
+        elif frame_name == "groceries_frame":
+                self.create_groceries_frame()
         # Create the frame if it doesn't exist
         elif frame_name not in self.frames:
             if frame_name == "add_recipe_frame":
                 self.create_add_recipe_frame()
-            elif frame_name == "groceries_frame":
-                self.create_groceries_frame()
-
+        
         # Hide all frames
         for frame in self.frames.values():
-            frame.grid_remove()  # Hide all frames
+            frame.grid_remove()
 
         # Show the requested frame
-        self.frames[frame_name].grid(sticky="nsew")  # Show the requested frame
+        self.frames[frame_name].grid(sticky="nsew")
