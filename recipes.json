@@ -131,5 +131,107 @@
                 "unit": "pcs"
             }
         ]
+    },
+    {
+        "name": "Lemon and Herb Sea Bass in Garlic Butter",
+        "servings": "2",
+        "ingredients": [
+            {
+                "name": "potatoes",
+                "quantity": "450",
+                "unit": "g"
+            },
+            {
+                "name": "dried oregano",
+                "quantity": "1",
+                "unit": "sachet"
+            },
+            {
+                "name": "garlic",
+                "quantity": "1",
+                "unit": "clove"
+            },
+            {
+                "name": "broccoli",
+                "quantity": "1",
+                "unit": "pcs"
+            },
+            {
+                "name": "lemon",
+                "quantity": "1",
+                "unit": "pcs"
+            },
+            {
+                "name": "lemon & herb seasoning",
+                "quantity": "1",
+                "unit": "sachet"
+            },
+            {
+                "name": "salmon fillets",
+                "quantity": "2",
+                "unit": "pcs"
+            }
+        ]
+    },
+    {
+        "name": "Seasame Lemon Chicken Noodles",
+        "servings": "2",
+        "ingredients": [
+            {
+                "name": "garlic",
+                "quantity": "2",
+                "unit": "pcs"
+            },
+            {
+                "name": "lemon",
+                "quantity": "1",
+                "unit": "pcs"
+            },
+            {
+                "name": "green beans",
+                "quantity": "150",
+                "unit": "g"
+            },
+            {
+                "name": "diced british chicken breast",
+                "quantity": "240",
+                "unit": "g"
+            },
+            {
+                "name": "cornflour",
+                "quantity": "10",
+                "unit": "g"
+            },
+            {
+                "name": "lemon & herb seasoning",
+                "quantity": "2",
+                "unit": "sachet"
+            },
+            {
+                "name": "egg noodle nest",
+                "quantity": "125",
+                "unit": "g"
+            },
+            {
+                "name": "ginger puree",
+                "quantity": "15",
+                "unit": "g"
+            },
+            {
+                "name": "soy sauce",
+                "quantity": "25",
+                "unit": "ml"
+            },
+            {
+                "name": "honey",
+                "quantity": "30",
+                "unit": "g"
+            },
+            {
+                "name": "sesame seeds",
+                "quantity": "5",
+                "unit": "g"
+            }
+        ]
     }
 ]

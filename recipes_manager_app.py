@@ -112,6 +112,10 @@ class RecipesManagerApp(ctk.CTk):
             delete_button = ctk.CTkButton(recipes_frame, text="Delete", command=lambda idx=i: self.delete_recipe(idx))
             delete_button.grid(row=i*2, column=1, sticky="ew", padx=5, pady=5)
 
+            # Add an edit button
+            edit_button = ctk.CTkButton(recipes_frame, text="Edit", command=lambda idx=i: self.edit_recipe(idx))
+            edit_button.grid(row=i*2+1, column=1, sticky="n", padx=5, pady=5)
+
     def create_groceries_frame(self):
         # Create or refresh the frame for viewing the grocery list
         if "groceries_frame" in self.frames:
@@ -275,6 +279,40 @@ class RecipesManagerApp(ctk.CTk):
 
         self.reset_form()
 
+    def edit_recipe(self, index):
+        # Load the selected recipe's details
+        recipe = self.recipes[index]
+
+        # Show the add recipe frame
+        self.show_frame("add_recipe_frame")
+
+        # Populate the form with recipe details
+        self.recipe_name_entry.delete(0, 'end')
+        self.recipe_name_entry.insert(0, recipe.name)
+
+        # Populate the servings field
+        self.servings_entry.delete(0, 'end')
+        self.servings_entry.insert(0, recipe.servings)
+
+
+        # Clear any existing ingredient entries
+        for ingredient_entry, quantity_entry, unit_entry in self.ingredients_entries:
+            ingredient_entry.destroy()
+            quantity_entry.destroy()
+            unit_entry.destroy()
+        self.ingredients_entries.clear()
+
+        # Populate with existing ingredients from the recipe
+        for ingredient in recipe.ingredients:
+            self.add_ingredient_entry()
+            ingredient_entry, quantity_entry, unit_entry = self.ingredients_entries[-1]
+            ingredient_entry.insert(0, ingredient.name)
+            quantity_entry.insert(0, ingredient.quantity)
+            unit_entry.insert(0, ingredient.unit)
+
+        # Store the index of the recipe being edited
+        self.current_edit_index = index
+
     def delete_recipe(self, index):
         # Confirm deletion
         confirm = messagebox.askokcancel("Confirm Deletion", f"Are you sure you want to delete '{self.recipes[index].name}'?")
@@ -305,6 +343,10 @@ class RecipesManagerApp(ctk.CTk):
 
         # Add a new blank ingredient entry to start fresh
         self.add_ingredient_entry()
+
+        # Clear the current_edit_index if set
+        if hasattr(self, 'current_edit_index'):
+            del self.current_edit_index
 
     def show_frame(self, frame_name):
         # Destroy and recreate the frame to ensure it's always updated
